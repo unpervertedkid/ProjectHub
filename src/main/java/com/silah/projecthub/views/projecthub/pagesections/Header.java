@@ -1,8 +1,10 @@
 package com.silah.projecthub.views.projecthub.pagesections;
 
 import com.silah.projecthub.entities.ProjectCategory;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.Icon;
@@ -13,29 +15,65 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 
+import java.util.List;
+import java.util.Optional;
+
 
 public class Header extends HorizontalLayout {
-    public static HorizontalLayout createHeader() {
+    public static HorizontalLayout createHeaderWithSearch() {
         HorizontalLayout header = new HorizontalLayout();
         header.setAlignItems(Alignment.CENTER);
         header.setPadding(true);
 
-        Icon logo = new Icon(VaadinIcon.BULLSEYE);
-        Button login = createButton("Login");
-        Button register = createButton("Register");
-        TextField searchField = createSearchField();
-        Select<ProjectCategory> projectDropDown = getProjectDropDown();
+        HorizontalLayout buttons = new HorizontalLayout(getLoginButton(), getRegisterButton());
 
-        HorizontalLayout buttons = new HorizontalLayout(login, register);
-        HorizontalLayout logoLayout = new HorizontalLayout(logo);
-        HorizontalLayout searchLayout = new HorizontalLayout(searchField, projectDropDown);
-
-
-        header.add(logoLayout, searchLayout, buttons);
+        header.add(getLogoLayout(), getSearchLayout(), buttons);
 
         header.setWidthFull();
         header.setJustifyContentMode(JustifyContentMode.BETWEEN);
         return header;
+    }
+
+    public static HorizontalLayout createHeader(Optional<List<Component>> decoration) {
+        HorizontalLayout header = new HorizontalLayout();
+        header.setAlignItems(Alignment.CENTER);
+        header.setPadding(true);
+
+        HorizontalLayout buttons = new HorizontalLayout(getLoginButton(), getRegisterButton());
+
+        header.add(getLogoLayout());
+
+        decoration.ifPresent(header::add);
+
+        header.add(buttons);
+
+        header.setWidthFull();
+        header.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        return header;
+    }
+
+    public static HorizontalLayout getLogoLayout(){
+        Icon logo = new Icon(VaadinIcon.BULLSEYE);
+        return new HorizontalLayout(logo);
+    }
+
+    public static HorizontalLayout getSearchLayout(){
+        TextField searchField = createSearchField();
+        Select<ProjectCategory> projectDropDown = getProjectDropDown();
+        return new HorizontalLayout(searchField, projectDropDown);
+    }
+
+    public static Button getLoginButton(){
+
+        Button login = createButton("Login");
+        login.addClickListener(buttonClickEvent -> {
+            UI.getCurrent().navigate("login");
+        });
+        return login;
+    }
+
+    public static Button getRegisterButton(){
+        return createButton("Register");
     }
     private static Button createButton(String name) {
         Button button = new Button(name);
