@@ -54,6 +54,10 @@ public class Header extends HorizontalLayout {
 
     public static HorizontalLayout getLogoLayout(){
         Icon logo = new Icon(VaadinIcon.BULLSEYE);
+        logo.getStyle().set("cursor", "pointer");
+        logo.addClickListener(iconClickEvent -> {
+            UI.getCurrent().navigate("");
+        });
         return new HorizontalLayout(logo);
     }
 
