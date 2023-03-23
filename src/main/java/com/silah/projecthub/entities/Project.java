@@ -14,11 +14,11 @@ public class Project {
     private String name;
     private String description;
     private ProjectCategory category;
-    private String guide;
+    private  String guide;
 
     public Project() {
     }
-    public Project(long id, String name, String description, ProjectCategory category, String guide) {
+    public Project(String name, String description, ProjectCategory category, String guide) {
         this.id = id;
         this.name = name;
         this.description = description;
