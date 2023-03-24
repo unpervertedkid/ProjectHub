@@ -1,9 +1,6 @@
 package com.silah.projecthub.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Project {
@@ -14,6 +11,7 @@ public class Project {
     private String name;
     private String description;
     private ProjectCategory category;
+    @Column(columnDefinition = "TEXT")
     private  String guide;
 
     public Project() {
