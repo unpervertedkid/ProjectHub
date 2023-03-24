@@ -22,15 +22,21 @@ import java.util.Optional;
 public class Header extends HorizontalLayout {
     public static HorizontalLayout createHeaderWithSearch() {
         HorizontalLayout header = new HorizontalLayout();
-        header.setAlignItems(Alignment.CENTER);
         header.setPadding(true);
 
         HorizontalLayout buttons = new HorizontalLayout(getLoginButton(), getRegisterButton());
+        HorizontalLayout logo = getLogoLayout();
+        HorizontalLayout search = getSearchLayout();
 
-        header.add(getLogoLayout(), getSearchLayout(), buttons);
+        header.add(logo , search, buttons);
+
+        logo.setJustifyContentMode(JustifyContentMode.START);
+        search.setJustifyContentMode(JustifyContentMode.CENTER);
+        buttons.setJustifyContentMode(JustifyContentMode.END);
 
         header.setWidthFull();
         header.setJustifyContentMode(JustifyContentMode.BETWEEN);
+
         return header;
     }
 
