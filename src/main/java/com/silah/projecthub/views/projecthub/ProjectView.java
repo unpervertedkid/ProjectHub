@@ -37,7 +37,7 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Long>
 
         }
         else {
-            display404();
+            add(new PageNotFoundView());
         }
     }
 
@@ -62,6 +62,8 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Long>
     }
 
     private void loadProject(Optional<Project> project) {
+        if (project.isEmpty()) add(new PageNotFoundView());
+
         add(Header.createHeader(Optional.of(List.of(new H1(project.get().getName())))));
         H1  descriptionTitle =new H1("Description");
         Text description = new Text(project.get().getDescription());
@@ -75,15 +77,4 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Long>
         add(guideHeader,guide);
     }
 
-    private void display404() {
-        add(Header.createHeader(Optional.of(List.of(new H1("Ooops!")))));
-        // TODO: Add a 404 page
-        H1 h1 = new H1("404: Page not found");
-        h1.getStyle().set("text-align", "center");
-        h1.getStyle().set("margin-top", "auto");
-        h1.getStyle().set("margin-left", "auto");
-        h1.getStyle().set("margin-right", "auto");
-        h1.getStyle().set("display", "block");
-        add(h1);
-    }
 }
