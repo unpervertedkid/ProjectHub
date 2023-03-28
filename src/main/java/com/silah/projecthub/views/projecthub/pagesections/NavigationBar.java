@@ -11,6 +11,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
 
 public class NavigationBar extends AppLayout {
     public NavigationBar() {
@@ -32,6 +34,7 @@ public class NavigationBar extends AppLayout {
         Tab communityTab = getCommunityTab();
 
         Tabs navigationTabs = new Tabs(projectsTab, createTab, communityTab);
+        navigationTabs.setSelectedTab(currentUrlTab(projectsTab, createTab, communityTab));
         navigationTabs.setAutoselect(false);
         navigationTabs.addThemeVariants(TabsVariant.LUMO_CENTERED);
 
@@ -41,6 +44,19 @@ public class NavigationBar extends AppLayout {
 
         return navigationTabs;
 
+    }
+
+    private Tab currentUrlTab(Tab projectsTab, Tab createTab, Tab communityTab) {
+
+        String url = ((VaadinServletRequest) VaadinService.getCurrentRequest()).getServerName();
+
+        if (url.contains("create")) {
+            return createTab;
+        } else if (url.contains("community")) {
+            return communityTab;
+        } else {
+            return projectsTab;
+        }
     }
 
     private static void navigateToSelected(Tab projectsTab, Tab create, Tab profile, Tabs.SelectedChangeEvent selectedChangeEvent) {
