@@ -111,6 +111,7 @@ public class NavigationBar extends AppLayout {
         iconTabs.addSelectedChangeListener(selectedChangeEvent -> {
             if (selectedChangeEvent.getSelectedTab() == iconTab) {
                 UI.getCurrent().navigate("");
+                iconTabs.setSelectedTab(null);
             }
         });
         return iconTabs;
