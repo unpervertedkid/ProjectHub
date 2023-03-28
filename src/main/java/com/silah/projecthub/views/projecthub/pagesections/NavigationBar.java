@@ -5,21 +5,67 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.tabs.TabsVariant;
 
 public class NavigationBar extends AppLayout {
     public NavigationBar() {
         addNavigationBar();
     }
     public void addNavigationBar(){
-        HorizontalLayout iconTab = getIconTab();
+        Tabs iconTab = getIconTab();
 
         HorizontalLayout buttons = getButtons();
 
-        addToNavbar(iconTab, buttons);
+        Tabs navigationTabs = getNavigationTabs();
+
+        addToNavbar(iconTab,navigationTabs,buttons);
+    }
+
+    private Tabs getNavigationTabs() {
+        Tab projectsTab = getProjectTab();
+        Tab createTab = getCreateTab();
+        Tab communityTab = getCommunityTab();
+
+        Tabs navigationTabs = new Tabs(projectsTab, createTab, communityTab);
+        navigationTabs.setAutoselect(false);
+        navigationTabs.addThemeVariants(TabsVariant.LUMO_CENTERED);
+
+        navigationTabs.addSelectedChangeListener(selectedChangeEvent -> {
+            navigateToSelected(projectsTab, createTab, communityTab, selectedChangeEvent);
+        });
+
+        return navigationTabs;
+
+    }
+
+    private static void navigateToSelected(Tab projectsTab, Tab create, Tab profile, Tabs.SelectedChangeEvent selectedChangeEvent) {
+        if (selectedChangeEvent.getSelectedTab() == create) {
+            UI.getCurrent().navigate("projects/create");
+        } else if (selectedChangeEvent.getSelectedTab() == projectsTab) {
+            UI.getCurrent().navigate("projects");
+        } else if (selectedChangeEvent.getSelectedTab() == profile) {
+            UI.getCurrent().navigate("community");
+        }
+    }
+
+    private static Tab getCommunityTab() {
+        Tab profile = new Tab("Community");
+        return profile;
+    }
+
+    private static Tab getCreateTab() {
+        Tab create = new Tab("Create");
+        return create;
+    }
+
+    private static Tab getProjectTab() {
+        Tab projectsTab = new Tab("Projects");
+        return projectsTab;
     }
 
     private HorizontalLayout getButtons() {
@@ -33,6 +79,7 @@ public class NavigationBar extends AppLayout {
         buttonLayout.setMargin(true);
         buttonLayout.setSizeFull();
         buttonLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        buttonLayout.setPadding(false);
         buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
 
         return buttonLayout;
@@ -41,6 +88,7 @@ public class NavigationBar extends AppLayout {
     private Button getRegisterButton() {
         Button registerButton = new Button("Register");
         registerButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        registerButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         registerButton.addClickListener(buttonClickEvent -> UI.getCurrent().navigate("register"));
         return registerButton;
     }
@@ -48,27 +96,23 @@ public class NavigationBar extends AppLayout {
     private Button getLoginButton() {
         Button loginButton = new Button("Login");
         loginButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        loginButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         loginButton.addClickListener(buttonClickEvent -> UI.getCurrent().navigate("login"));
         return loginButton;
     }
 
-    private HorizontalLayout getIconTab() {
-        HorizontalLayout iconLayout = new HorizontalLayout();
+    private Tabs getIconTab() {
+        Tab iconTab = new Tab(VaadinIcon.BULLSEYE.create(), new Span("ProjectHub"));
+        Tabs iconTabs = new Tabs(iconTab);
+        iconTabs.setSelectedTab(null);
 
-        Icon homeIcon = new Icon(VaadinIcon.BULLSEYE);
-        homeIcon.getStyle().set("cursor", "pointer");
-        homeIcon.addClickListener(iconClickEvent -> UI.getCurrent().navigate(""));
+        iconTabs.setAutoselect(false);
 
-        Span homeSpan = new Span("ProjectHub");
-        homeSpan.getStyle().set("cursor", "pointer");
-        homeSpan.addClickListener(spanClickEvent -> UI.getCurrent().navigate(""));
-
-        iconLayout.add(homeIcon, homeSpan);
-        iconLayout.setMargin(true);
-        iconLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
-        iconLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        iconLayout.setSpacing(true);
-
-        return iconLayout;
+        iconTabs.addSelectedChangeListener(selectedChangeEvent -> {
+            if (selectedChangeEvent.getSelectedTab() == iconTab) {
+                UI.getCurrent().navigate("");
+            }
+        });
+        return iconTabs;
     }
 }

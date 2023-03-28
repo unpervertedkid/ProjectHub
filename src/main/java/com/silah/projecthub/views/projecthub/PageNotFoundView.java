@@ -1,17 +1,17 @@
 package com.silah.projecthub.views.projecthub;
 
-import com.silah.projecthub.views.projecthub.pagesections.Header;
+import com.silah.projecthub.views.projecthub.pagesections.NavigationBar;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
-import java.util.Optional;
-
 public class PageNotFoundView extends VerticalLayout {
+
+
     public PageNotFoundView() {
-        add(Header.createHeader(Optional.empty()));
+        add(new NavigationBar());
         displayPageNotFound();
     }
 

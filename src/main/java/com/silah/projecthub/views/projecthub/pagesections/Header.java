@@ -36,7 +36,7 @@ public class Header extends HorizontalLayout {
 
         header.setWidthFull();
         header.setJustifyContentMode(JustifyContentMode.BETWEEN);
-
+        
         return header;
     }
 
