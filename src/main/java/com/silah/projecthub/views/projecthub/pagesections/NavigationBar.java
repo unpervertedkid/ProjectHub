@@ -18,29 +18,28 @@ public class NavigationBar extends AppLayout {
     public NavigationBar() {
         addNavigationBar();
     }
-    public void addNavigationBar(){
+
+    public void addNavigationBar() {
         Tabs iconTab = getIconTab();
 
         HorizontalLayout buttons = getButtons();
 
         Tabs navigationTabs = getNavigationTabs();
 
-        addToNavbar(iconTab,navigationTabs,buttons);
+        addToNavbar(iconTab, navigationTabs, buttons);
     }
 
     private Tabs getNavigationTabs() {
-        Tab projectsTab = getProjectTab();
-        Tab createTab = getCreateTab();
-        Tab communityTab = getCommunityTab();
+        Tab projectsTab = new Tab("Projects");
+        Tab createTab = new Tab("Create");
+        Tab communityTab = new Tab("Community");
 
         Tabs navigationTabs = new Tabs(projectsTab, createTab, communityTab);
         navigationTabs.setSelectedTab(currentUrlTab(projectsTab, createTab, communityTab));
         navigationTabs.setAutoselect(false);
         navigationTabs.addThemeVariants(TabsVariant.LUMO_CENTERED);
 
-        navigationTabs.addSelectedChangeListener(selectedChangeEvent -> {
-            navigateToSelected(projectsTab, createTab, communityTab, selectedChangeEvent);
-        });
+        navigationTabs.addSelectedChangeListener(selectedChangeEvent -> navigateToSelected(projectsTab, createTab, communityTab, selectedChangeEvent));
 
         return navigationTabs;
 
@@ -67,21 +66,6 @@ public class NavigationBar extends AppLayout {
         } else if (selectedChangeEvent.getSelectedTab() == profile) {
             UI.getCurrent().navigate("community");
         }
-    }
-
-    private static Tab getCommunityTab() {
-        Tab profile = new Tab("Community");
-        return profile;
-    }
-
-    private static Tab getCreateTab() {
-        Tab create = new Tab("Create");
-        return create;
-    }
-
-    private static Tab getProjectTab() {
-        Tab projectsTab = new Tab("Projects");
-        return projectsTab;
     }
 
     private HorizontalLayout getButtons() {
