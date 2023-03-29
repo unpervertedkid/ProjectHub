@@ -4,7 +4,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -20,7 +21,7 @@ public class NavigationBar extends AppLayout {
     }
 
     public void addNavigationBar() {
-        Tabs iconTab = getIconTab();
+        Tab iconTab = getIconTab();
 
         HorizontalLayout buttons = getButtons();
 
@@ -36,6 +37,7 @@ public class NavigationBar extends AppLayout {
 
         Tabs navigationTabs = new Tabs(projectsTab, createTab, communityTab);
         navigationTabs.setSelectedTab(currentUrlTab(projectsTab, createTab, communityTab));
+        navigationTabs.setSizeFull();
         navigationTabs.setAutoselect(false);
         navigationTabs.addThemeVariants(TabsVariant.LUMO_CENTERED);
 
@@ -47,23 +49,28 @@ public class NavigationBar extends AppLayout {
 
     private Tab currentUrlTab(Tab projectsTab, Tab createTab, Tab communityTab) {
 
-        String url = ((VaadinServletRequest) VaadinService.getCurrentRequest()).getServerName();
+        // TODO: This is a hacky way to get the current url. Find a better way to do this.
+        VaadinServletRequest req = (VaadinServletRequest) VaadinService.getCurrentRequest();
+        StringBuffer uriString = req.getRequestURL();
+        String uri = uriString.toString();
 
-        if (url.contains("create")) {
+        System.out.println(uri);
+
+        if (uri.contains("create")) {
             return createTab;
-        } else if (url.contains("community")) {
+        } else if (uri.contains("community")) {
             return communityTab;
         } else {
             return projectsTab;
         }
     }
 
-    private static void navigateToSelected(Tab projectsTab, Tab create, Tab profile, Tabs.SelectedChangeEvent selectedChangeEvent) {
+    private static void navigateToSelected(Tab projectsTab, Tab create, Tab community, Tabs.SelectedChangeEvent selectedChangeEvent) {
         if (selectedChangeEvent.getSelectedTab() == create) {
             UI.getCurrent().navigate("projects/create");
         } else if (selectedChangeEvent.getSelectedTab() == projectsTab) {
             UI.getCurrent().navigate("projects");
-        } else if (selectedChangeEvent.getSelectedTab() == profile) {
+        } else if (selectedChangeEvent.getSelectedTab() == community) {
             UI.getCurrent().navigate("community");
         }
     }
@@ -77,7 +84,6 @@ public class NavigationBar extends AppLayout {
         buttonLayout.add(loginButton, registerButton);
 
         buttonLayout.setMargin(true);
-        buttonLayout.setSizeFull();
         buttonLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         buttonLayout.setPadding(false);
         buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
@@ -101,19 +107,17 @@ public class NavigationBar extends AppLayout {
         return loginButton;
     }
 
-    private Tabs getIconTab() {
-        Tab iconTab = new Tab(VaadinIcon.BULLSEYE.create(), new Span("ProjectHub"));
-        Tabs iconTabs = new Tabs(iconTab);
-        iconTabs.setSelectedTab(null);
+    private Tab getIconTab() {
+        Icon logo = new Icon(VaadinIcon.BULLSEYE);
+        logo.getStyle().set("cursor", "pointer");
+        logo.addClickListener(iconClickEvent -> UI.getCurrent().navigate(""));
 
-        iconTabs.setAutoselect(false);
+        Label projectName = new Label("ProjectHub");
+        HorizontalLayout labelLayout = new HorizontalLayout(projectName);
+        labelLayout.add(projectName);
+        labelLayout.getStyle().set("cursor", "pointer");
+        labelLayout.addClickListener(labelClickEvent -> UI.getCurrent().navigate(""));
 
-        iconTabs.addSelectedChangeListener(selectedChangeEvent -> {
-            if (selectedChangeEvent.getSelectedTab() == iconTab) {
-                UI.getCurrent().navigate("");
-                iconTabs.setSelectedTab(null);
-            }
-        });
-        return iconTabs;
+        return new Tab(logo, labelLayout);
     }
 }
