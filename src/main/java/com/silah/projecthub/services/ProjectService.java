@@ -5,6 +5,7 @@ import com.silah.projecthub.entities.ProjectCategory;
 import com.silah.projecthub.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,5 +23,9 @@ public class ProjectService {
 
     public Optional<Project> getProjectById(long id) {
         return projectRepository.findById(id);
+    }
+
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
     }
 }
