@@ -35,7 +35,7 @@ public class Card {
         card.setAlignItems(FlexComponent.Alignment.START);
 
         //Image placeholder.jpeg is in images folder in resources
-        Image image = new Image("/images/PlaceHolder1.jpg", "Project Image");
+        Image image = new Image("/images/CardPlaceHolder.jpg", "Project Image");
         image.setHeight("300px");
         image.setWidth("200px");
 
