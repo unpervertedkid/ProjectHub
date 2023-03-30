@@ -22,7 +22,7 @@ public class Card {
         //Make the card clickable
         card.getStyle().set("cursor", "pointer");
         //Add a click listener to the card
-        card.addClickListener(event -> UI.getCurrent().navigate("projects/create"));
+        card.addClickListener(event -> UI.getCurrent().navigate("projects/" + project.getId()));
 
         //Add a border and shadow to the card according to material design
         card.getStyle().set("border", "1px solid #e0e0e0");
