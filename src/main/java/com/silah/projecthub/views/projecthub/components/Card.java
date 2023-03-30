@@ -1,16 +1,20 @@
 package com.silah.projecthub.views.projecthub.components;
 
 import com.silah.projecthub.entities.Project;
-import com.vaadin.flow.component.Composite;
+import com.silah.projecthub.entities.ProjectCategory;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import org.springframework.stereotype.Component;
 
-public class Card extends Composite {
-    public  static FlexLayout createCard(Project project) {
+import java.util.List;
+
+@Component
+public class Card {
+    public   FlexLayout createCard(Project project) {
         FlexLayout card = new FlexLayout();
         card.setHeight("200px");
         card.setWidth("200px");
@@ -18,9 +22,7 @@ public class Card extends Composite {
         //Make the card clickable
         card.getStyle().set("cursor", "pointer");
         //Add a click listener to the card
-        card.addClickListener(event -> {
-            UI.getCurrent().navigate("projects/create");
-        });
+        card.addClickListener(event -> UI.getCurrent().navigate("projects/create"));
 
         //Add a border and shadow to the card according to material design
         card.getStyle().set("border", "1px solid #e0e0e0");
@@ -33,16 +35,39 @@ public class Card extends Composite {
         card.setAlignItems(FlexComponent.Alignment.START);
 
         //Image placeholder.jpeg is in images folder in resources
-        Image image = new Image("https://images.freeimages.com/images/large-previews/1c1/links-1242361.jpg", "Project Image");
+        Image image = new Image("/images/PlaceHolder1.jpg", "Project Image");
         image.setHeight("300px");
         image.setWidth("200px");
 
         H4 name = new H4(project.getName());
-        Text description = new Text(project.getDescription());
+        ProjectCategory category = project.getCategory();
 
-        card.add(image, name, description);
+        card.add(image, name, new Text(category.toString()));
 
         return card;
+    }
+
+    public FlexLayout getProjectLayout(List<Project> projects) {
+        FlexLayout flexLayout = new FlexLayout();
+        flexLayout.setWidthFull();
+        flexLayout.getStyle().set("padding", "10px");
+        flexLayout.getStyle().set("gap", "10px");
+        flexLayout.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+        flexLayout.setAlignContent(FlexLayout.ContentAlignment.CENTER);
+
+        int maxCardsPerRow = 6;
+        int currentCardsInRow = 0;
+
+        for (Project project : projects) {
+            FlexLayout customCard = createCard(project);
+            flexLayout.add(customCard);
+
+            currentCardsInRow++;
+            if (currentCardsInRow == maxCardsPerRow) {
+                currentCardsInRow = 0;
+            }
+        }
+        return flexLayout;
     }
 
 }
