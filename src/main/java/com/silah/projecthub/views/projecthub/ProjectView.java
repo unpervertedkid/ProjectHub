@@ -2,7 +2,7 @@ package com.silah.projecthub.views.projecthub;
 
 import com.silah.projecthub.entities.Project;
 import com.silah.projecthub.services.ProjectService;
-import com.silah.projecthub.views.projecthub.pagesections.Header;
+import com.silah.projecthub.views.projecthub.pagesections.NavigationBar;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.Icon;
@@ -16,7 +16,6 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import java.util.List;
 import java.util.Optional;
 
 @PageTitle("Project")
@@ -62,9 +61,12 @@ public class ProjectView extends VerticalLayout implements HasUrlParameter<Long>
     }
 
     private void loadProject(Optional<Project> project) {
-        if (project.isEmpty()) add(new PageNotFoundView());
+        if (project.isEmpty()) {
+            add(new PageNotFoundView());
+            return;
+        }
 
-        add(Header.createHeader(Optional.of(List.of(new H1(project.get().getName())))));
+        add(new NavigationBar());
         H1  descriptionTitle =new H1("Description");
         Text description = new Text(project.get().getDescription());
         add(descriptionTitle, description);
