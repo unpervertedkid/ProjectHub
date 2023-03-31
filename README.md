@@ -1,7 +1,8 @@
 # Project Hub
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+A web app to enable users to access project guides to enable them to learn and practice skills in any technical field. 
+We want to beat that phase where when learning a new technology you feel that you are comfortable with the technology but can't really build something concrete with it by providing easy to follow guides for most common technologies and scenarions.
+
 
 ## Running the application
 
